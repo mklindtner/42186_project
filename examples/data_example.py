@@ -12,7 +12,17 @@ relevant = ["match_id", "division_name", "match_date", "match_time", "match_conc
             "team1_coach_id", "team1_race_name", "team2_coach_id", "team2_race_name", 
             "team1_score", "team2_score","team1_win","team2_win","mirror_match", 
             "coach1_ranking","coach2_ranking","coach1_CR","coach2_CR"]
-df = df[relevant]
+df_matches = df[relevant]
+
+
+df_matches['match_date'] = pd.to_datetime(df_matches.match_date) # Datetime object
+# calculate match score difference
+df_matches['team1_win'] = np.sign(df_matches['team1_score'] - df_matches['team2_score'])
+df_matches['team2_win'] = np.sign(df_matches['team2_score'] - df_matches['team1_score'])
+
+
+print(df_matches['team1_win'])
+
 
 #For Later
 #One-hot encoding
@@ -20,7 +30,7 @@ df = df[relevant]
 
 #Now
 #Total Fights
-total_fights = df.shape[0]
+# total_fights = df.shape[0]
 
 
 #Fordeling over winrates (antallet af spillere på y-aksen, x-aksen er winrate, )
@@ -34,12 +44,12 @@ total_fights = df.shape[0]
 # coach_wins = df.groupby('team1_coach_id')['team1_win'].sum().reset_index()
 # coach_wins.columns = ['coach_id', 'total_wins']
 
-df_wins1 = df[df['team1_win'] > 0]
-df_coach1 = df_wins1.groupby('team1_coach_id')['team1_win'].sum()
-print(df_coach1)
+# df_wins1 = df[df['team1_win'] > 0]
+# df_coach1 = df_wins1.groupby('team1_coach_id')['team1_win'].sum()
+# print(df_coach1)
 
-df_wins2 = df[df['team2_win'] > 0]
-df_coach2 = df_wins2.groupby('team2_coach_id')['team2_win'].sum()
+# df_wins2 = df[df['team2_win'] > 0]
+# df_coach2 = df_wins2.groupby('team2_coach_id')['team2_win'].sum()
 
 
 
