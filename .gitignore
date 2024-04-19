@@ -4,3 +4,4 @@ df_matches.csv
 .DS_Store
 fumbbl_datasets/
 df_matches_clean.csv
+data/*
