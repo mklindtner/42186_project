@@ -1,6 +1,7 @@
 import pyro
+from tqdm import tqdm
 
-def run_inference(model, game_info, obs, num_steps=5000, guide=None, optimizer=None, lr=0.01, verbose=True):
+def run_inference(model, game_info, obs, num_steps=2000, guide=None, optimizer=None, lr=0.01, verbose=True):
     
     pyro.clear_param_store()
 
@@ -12,7 +13,8 @@ def run_inference(model, game_info, obs, num_steps=5000, guide=None, optimizer=N
 
     svi = pyro.infer.SVI(model, guide, optimizer, loss=pyro.infer.Trace_ELBO())
 
-    for step in range(num_steps):
+    pbar = tqdm(range(num_steps))
+    for step in pbar:
         loss = svi.step(game_info, obs)
-        if step % 100 == 0 and verbose:
-            print(f"Step {step} : loss = {loss}")
+        if step % 50 == 0 and verbose:
+            pbar.set_description("Loss = %f" % loss)
