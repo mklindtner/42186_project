@@ -1,15 +1,12 @@
 import pyro
 from tqdm import tqdm
 
-def run_inference(model, game_info, obs, num_steps=2000, guide=None, optimizer=None, lr=0.01, verbose=True):
+def run_inference(model, guide, game_info, obs, num_steps=2000, optimizer=None, lr=0.01, verbose=True):
     
     pyro.clear_param_store()
 
     if optimizer is None:
         optimizer = pyro.optim.Adam({"lr": lr})
-
-    if guide is None:
-        guide = pyro.contrib.autoguide.AutoNormal(model)
 
     svi = pyro.infer.SVI(model, guide, optimizer, loss=pyro.infer.Trace_ELBO())
 
